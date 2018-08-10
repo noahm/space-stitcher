@@ -1,4 +1,26 @@
 {
   "name": "@excaliburjs/sample-shootemup",
-  "version": "0.1.0"
+  "private": true,
+  "version": "0.1.0",
+  "description": "Sample Excalibur.js shoot 'em up game",
+  "homepage": "https://github.com/excaliburjs/sample-shootemup",
+   "author": {
+    "name": "excaliburjs",
+    "url": "https://excaliburjs.com/",
+    "git": "https://github.com/excaliburjs/Excalibur"
+  },
+  "licenses": [
+    {
+      "type": "BSD",
+      "url": "https://github.com/excaliburjs/Excalibur/blob/master/LICENSE"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/excaliburjs/sample-shootemup.git"
+  },
+  "bugs": {
+    "url": "https://github.com/excaliburjs/sample-shootemup/issues"
+  },
+  "dependencies": {}
 }
