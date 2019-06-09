@@ -1,19 +1,18 @@
 import * as ex from "excalibur";
-import { Resources, gameSheet } from "../resources";
+import { Sounds, gameSheet } from "../resources";
 import { Bullet } from "./bullet";
 
 export class Missile extends ex.Actor {
     constructor() {
         super({
-            x: 0,
-            y: 0,
+            pos: ex.Vector.Zero,
             width: 60,
             height: 20
         });
 
         this.on('precollision', this.onPreCollision);
         this.on('exitviewport', () => {
-            Resources.rocketSound.stop();
+            Sounds.rocketSound.stop();
             this.kill();
         });
     }
@@ -26,8 +25,8 @@ export class Missile extends ex.Actor {
 
     onPreCollision(evt: ex.PreCollisionEvent) {
         if(!(evt.other instanceof Bullet)){
-            Resources.rocketSound.stop();
-            Resources.explodeSound.play();
+            Sounds.rocketSound.stop();
+            Sounds.explodeSound.play();
             this.kill();
          }
     }

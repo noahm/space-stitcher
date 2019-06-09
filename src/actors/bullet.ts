@@ -4,16 +4,15 @@ import { gameSheet } from "../resources";
 import { Baddie } from "./baddie";
 
 export class Bullet extends ex.Actor {
-    public owner: ex.Actor;
-    constructor(x, y, dx, dy, owner?: ex.Actor) {
+    public owner?: ex.Actor;
+    constructor(x: number, y: number, dx: number, dy: number, owner?: ex.Actor) {
         super({
-            x: x, 
-            y: y,
+            pos: new ex.Vector(x, y),
             vel: new ex.Vector(dx, dy),
             width: Config.bulletSize,
             height: Config.bulletSize,
-            collisionType: ex.CollisionType.Passive
         });
+        this.body.collider.type = ex.CollisionType.Passive;
         this.owner = owner;
     }
     

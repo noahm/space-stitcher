@@ -26,7 +26,7 @@ export class Game extends ex.Scene {
         const scoreLabel = new ex.Label("Score: " + stats.score, 20, 50);
         scoreLabel.color = ex.Color.Azure;
         scoreLabel.scale = new ex.Vector(3, 3);
-        scoreLabel.on('preupdate', function(evt){
+        scoreLabel.on('preupdate', function(this: ex.Label, evt){
             this.text = "Score: " + stats.score;
         });
         engine.add(scoreLabel);

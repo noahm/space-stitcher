@@ -7,25 +7,25 @@ export class HealthBar extends ex.Actor {
     constructor() {
         super({
             color: ex.Color.Green,
-            x: 20,
-            y: 0,
+            pos: new ex.Vector(20, 0),
             width: 0,
             height: 0,
             anchor: ex.Vector.Zero.clone(),
-            collisionType: ex.CollisionType.PreventCollision,
         });
+
+        this.body.collider.type = ex.CollisionType.PreventCollision;
     }
     
     onInitialize(engine: ex.Engine) {
-        this.x = 20;
-        this.y = engine.drawHeight - Config.healthBarHeight - 20;
-        this.setWidth(Config.healthBarWidth);
-        this.setHeight(Config.healthBarHeight);
+        this.pos = new ex.Vector(20,
+                        engine.drawHeight - Config.healthBarHeight - 20);
+        this.width = Config.healthBarWidth;
+        this.height = Config.healthBarHeight;
         
     }
 
     onPreUpdate() {
-        this.setWidth(Config.healthBarWidth * (stats.hp / Config.totalHp));
+        this.width = Config.healthBarWidth * (stats.hp / Config.totalHp);
     }
 
     onPostDraw(ctx: CanvasRenderingContext2D) {
@@ -33,8 +33,8 @@ export class HealthBar extends ex.Actor {
        ctx.fillStyle = this.color.toString();
        ctx.lineWidth = 3;
        ctx.font = 'normal 30px sans-serif'
-       ctx.fillText("HP:", -5, - this.getHeight());
-       ctx.strokeRect(-5, -5, Config.healthBarWidth + 10, this.getHeight() + 10);
+       ctx.fillText("HP:", -5, - this.height);
+       ctx.strokeRect(-5, -5, Config.healthBarWidth + 10, this.height + 10);
     }
 
 }

@@ -9,16 +9,15 @@ export class AnimationManager extends ex.Actor {
     private animations: AnimationNode[] = [];
     constructor() {
         super({
-            x: 0, 
-            y: 0, 
+            pos: ex.Vector.Zero,
             width: 0,
             height: 0,
             collisionType: ex.CollisionType.PreventCollision,
         });
         this.traits.length = 0;
     }
-    
-    play(animation: ex.Animation, pos: ex.Vector){
+
+    play(animation: ex.Animation, pos: ex.Vector) {
         this.animations.push({
             anim: animation,
             pos: pos.clone()

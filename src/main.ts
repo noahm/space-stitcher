@@ -1,7 +1,7 @@
 // Main Game Logic
 import * as ex from 'excalibur';
 import Config from './config';
-import { Resources, loader } from './resources';
+import { Sounds, loader } from './resources';
 import { Game } from './game';
 
 const engine = new ex.Engine({
@@ -31,11 +31,11 @@ engine.input.keyboard.on('press', (evt: ex.Input.KeyEvent) => {
 });
 
 engine.start(loader).then(() => {
-   Resources.laserSound.volume = Config.soundVolume;
-   Resources.explodeSound.volume = Config.soundVolume;
-   Resources.enemyFireSound.volume = Config.soundVolume;
-   Resources.powerUp.volume = Config.soundVolume;
-   Resources.rocketSound.volume = Config.soundVolume;
+   Sounds.laserSound.volume = Config.soundVolume;
+   Sounds.explodeSound.volume = Config.soundVolume;
+   Sounds.enemyFireSound.volume = Config.soundVolume;
+   Sounds.powerUp.volume = Config.soundVolume;
+   Sounds.rocketSound.volume = Config.soundVolume;
    
    console.log("Game Resources Loaded");
 });

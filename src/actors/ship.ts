@@ -1,5 +1,5 @@
 import * as ex from "excalibur";
-import { gameSheet, Resources, explosionSpriteSheet } from "../resources";
+import { gameSheet, Sounds, explosionSpriteSheet } from "../resources";
 import Config from "../config";
 import { Bullet } from "./bullet";
 import { Baddie } from "./baddie";
@@ -7,13 +7,13 @@ import { animManager } from "./animation-manager";
 import { stats } from "../stats";
 
 type FireFunction = (engine: ex.Engine) => void;
-const throttle = function(func: FireFunction, throttle: number): FireFunction {
+const throttle = function(this: any, func: FireFunction, throttle: number): FireFunction {
     var lastTime = Date.now();
     var throttle = throttle;
-    return function() {
+    return (engine: ex.Engine) => {
        var currentTime = Date.now();
        if(currentTime - lastTime > throttle){
-          var val = func.apply(this, Array.prototype.slice.call(arguments,0));
+          var val = func.apply(this, [engine]);
           lastTime = currentTime;
           return val;
        }
@@ -22,16 +22,16 @@ const throttle = function(func: FireFunction, throttle: number): FireFunction {
 
 export class Ship extends ex.Actor {
     private flipBarrel = false;
-    private throttleFire: FireFunction;
-    private explode: ex.Animation;
-    constructor(x, y, width, height) {
+    private throttleFire?: FireFunction;
+    private explode?: ex.Animation;
+    constructor(x: number, y: number, width: number, height: number) {
         super({
-            x: x,
-            y: x,
+            pos: new ex.Vector(x, y),
             width: width,
             height: height,
-            collisionType: ex.CollisionType.Passive
         });
+
+        this.body.collider.type = ex.CollisionType.Passive;
     }
 
     onInitialize(engine: ex.Engine) {
@@ -47,7 +47,7 @@ export class Ship extends ex.Actor {
          });
 
         // Pointer
-        engine.input.pointers.primary.on('down', (evt: ex.Input.PointerDownEvent) => this.handlePointerEvent(engine, evt));
+        engine.input.pointers.primary.on('down', (evt) => this.handlePointerEvent(engine, <ex.Input.PointerDownEvent>evt));
         engine.input.pointers.primary.on('up', () => this.vel = ex.Vector.Zero.clone());
 
         // Get animation
@@ -62,7 +62,7 @@ export class Ship extends ex.Actor {
 
     onPreCollision(evt: ex.PreCollisionEvent) {
         if(evt.other instanceof Baddie || ex.Util.contains(Baddie.Bullets, evt.other)){
-            Resources.hitSound.play();
+            Sounds.hitSound.play();
             this.actions.blink(300, 300, 3);
             stats.hp -= Config.enemyDamage;
             if (stats.hp <= 0) {
@@ -73,25 +73,25 @@ export class Ship extends ex.Actor {
     }
 
     onPostUpdate(engine: ex.Engine, delta: number) {
-        if (stats.hp <= 0) {
+        if (stats.hp <= 0 && this.explode) {
             // update game to display game over
             // gameOver = true;
             animManager.play(this.explode, this.pos);
-            Resources.explodeSound.play();
+            Sounds.explodeSound.play();
             this.kill();
          }
 
         // Keep player in the viewport
-       if(this.x < 0) this.x = 0;
-       if(this.y < 0) this.y = 0;
-       if(this.x > engine.drawWidth - this.getWidth()) this.x = (engine.drawWidth - this.getWidth());
-       if(this.y > engine.drawHeight - this.getHeight()) this.y = (engine.drawHeight - this.getHeight());
+       if(this.pos.x < 0) this.pos.x = 0;
+       if(this.pos.y < 0) this.pos.y = 0;
+       if(this.pos.x > engine.drawWidth - this.width) this.pos.x = (engine.drawWidth - this.width);
+       if(this.pos.y > engine.drawHeight - this.height) this.pos.y = (engine.drawHeight - this.height);
     }
 
     private fire = (engine: ex.Engine) => {
-        let bullet = new Bullet(this.x + (this.flipBarrel?-40:40), this.y - 20, 0, Config.playerBulletVelocity, this);
+        let bullet = new Bullet(this.pos.x + (this.flipBarrel?-40:40), this.pos.y - 20, 0, Config.playerBulletVelocity, this);
         this.flipBarrel = !this.flipBarrel;
-        Resources.laserSound.play();
+        Sounds.laserSound.play();
         engine.add(bullet);
     }
 
@@ -102,7 +102,7 @@ export class Ship extends ex.Actor {
         if (distance > 50) {
             this.vel = dir.scale(Config.playerSpeed/distance);
         } else {
-            this.throttleFire(engine);
+            this.throttleFire ? this.throttleFire(engine) : null;
         }
     }
 
@@ -110,7 +110,7 @@ export class Ship extends ex.Actor {
         let dir = ex.Vector.Zero.clone();
 
         if (evt.key === ex.Input.Keys.Space) {
-            this.throttleFire(engine);
+            this.throttleFire ? this.throttleFire(engine) : null;
             if (this.vel.x !== 0 || this.vel.y !== 0) {
                 dir = this.vel.normalize();
             }
@@ -135,7 +135,6 @@ export class Ship extends ex.Actor {
             evt.key ===  ex.Input.Keys.S) {
             dir.y += 1;
         }
-        
 
         if (dir.x !== 0 || dir.y !== 0) {
             this.vel = dir.normalize().scale(Config.playerSpeed);
@@ -143,91 +142,3 @@ export class Ship extends ex.Actor {
     }
 }
 
-
-
-// var ShipOld = ex.Actor.extend({
-//     init : function(){
-//        this.fixed = true;
-//        var sprite = new ex.Sprite(fighter, 0, 0, 40, 40);
-//        var spriteAnim = gameSheet.getAnimationByIndices(game, [0, 1, 2], 100);
-//        spriteAnim.loop = true;
-//        spriteAnim.setScale(4);
-//        sprite.setScale(3);
-//        this.setCenterDrawing(true);
-//        sprite.transformAboutPoint(new ex.Vector(60, 60));
-//        sprite.setRotation(-Math.PI/2);
-//        this.addDrawing("default", spriteAnim);
- 
- 
-//        this.hp = Config.totalHp;
- 
-//        // Add event listeners
-//        this.addEventListener('space', function(){
-//           var b = flipFire(this.x + (flipBarrel?80:0), this.y, 0, Config.playerBulletVelocity, Color.Green);         
-//           if(b) b.owner = this;
-//        });
- 
-//        this.addEventListener('up', function(){
-//           this.dy = -Config.playerSpeed;
-//        });
- 
-//        this.addEventListener('down', function(){
-//           this.dy = Config.playerSpeed;
-//        });
- 
-//        this.addEventListener('left', function(){
-//           this.dx = -Config.playerSpeed;
-//        });
- 
-//        this.addEventListener('right', function(){
-//           this.dx = Config.playerSpeed;
-//        });
- 
-//        this.addEventListener('keyup', function(evt){
-//           if(InputKey.Up == evt.key || InputKey.Down == evt.key){
-//              this.dy = 0;
-//           }
-//           if(InputKey.Left == evt.key || InputKey.Right == evt.key){
-//              this.dx = 0;
-//           }
-//        });
- 
-//        this.addEventListener('keydown', function(evt){
-//           if(InputKey.F == evt.key){
-//              var m = fireMissile(this.getCenter().x-10, this.getCenter().y - 100);
-//              m.owner = this;
-//           }
-//        });
- 
-//        this.addEventListener('collision', function(evt){
-//           if(evt.other instanceof Baddie || evt.other.owner !== this){
-//              hitSound.play();
-//              this.blink(3, 1000, 100);
-//              this.hp -= Config.enemyDamage;
-//              healthBar.width = Config.healthBarWidth * (this.hp / Config.totalHp);           
-//           }
-//        });
-//     },
-//     update : function(engine, delta){
-//        // Call super update
-//        this.super.update.call(this, engine, delta);
- 
-//        if(this.hp <= 0){
-//           // update game to display game over
-//           gameOver = true;
-//           var explodeAnim = spriteSheet.getAnimationForAll(game, 40);
-//           explodeAnim.setScale(3);
-//           explodeAnim.play(this.x, this.y);
-//           explodeSound.play();
-//           this.kill();
-//        }
- 
-//        // Keep player in the viewport
-//        if(this.x < 0) this.x = 0;
-//        if(this.y < 0) this.y = 0;
-//        if(this.x > engine.width - this.getWidth()) this.x = (engine.width - this.getWidth());
-//        if(this.y > engine.height - this.getHeight()) this.y = (engine.height - this.getHeight());
- 
-//        // Custom collision for enemy bullets
-//     }
-//  });
