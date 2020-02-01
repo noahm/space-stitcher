@@ -24,11 +24,11 @@ export class RiftEdge extends Actor {
   }
 
   onInitialize() {
-    this.on("collisionstart", this.collisionStart);
+    this.on("precollision", this.collisionStart);
     this.on("collisionend", this.collisionEnd);
   }
 
-  collisionStart(evt: CollisionStartEvent) {
+  collisionStart(evt: PreCollisionEvent) {
     if (evt.other instanceof Ship) {
       this.color = Color.Blue;
     }
