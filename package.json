@@ -1,41 +1,29 @@
 {
-  "name": "@excaliburjs/sample-shootemup",
+  "name": "space-stitcher",
   "private": true,
   "version": "0.1.0",
-  "description": "Sample Excalibur.js shoot 'em up game",
-  "homepage": "https://github.com/excaliburjs/sample-shootemup",
+  "description": "Space stitcher - repair the rifts!",
+  "homepage": "https://github.com/noahm/space-stitcher",
   "scripts": {
     "build:prod": "webpack --mode production",
     "build:dev": "webpack --mode development",
-    "dev": "webpack-dev-server --mode development --open"
+    "start": "webpack-dev-server --mode development --open"
   },
-  "author": {
-    "name": "excaliburjs",
-    "url": "https://excaliburjs.com/",
-    "git": "https://github.com/excaliburjs/Excalibur"
-  },
-  "licenses": [
-    {
-      "type": "BSD",
-      "url": "https://github.com/excaliburjs/Excalibur/blob/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/excaliburjs/sample-shootemup.git"
-  },
-  "bugs": {
-    "url": "https://github.com/excaliburjs/sample-shootemup/issues"
+    "url": "https://github.com/noahm/space-stitcher.git"
   },
   "dependencies": {
     "excalibur": "0.23.0"
   },
   "devDependencies": {
-    "file-loader": "4.3.0",
-    "ts-loader": "6.2.1",
-    "typescript": "3.7.5",
-    "webpack": "4.41.5",
-    "webpack-cli": "3.3.10",
-    "webpack-dev-server": "3.10.2"
+    "file-loader": "^4.3.0",
+    "html-webpack-plugin": "^3.2.0",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.5",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-dev-server": "^3.10.2"
   }
 }
