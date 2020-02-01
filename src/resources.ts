@@ -10,6 +10,7 @@ const explodeFile = require("../res/explode.wav");
 const hitFile = require("../res/hit.wav");
 const powerupFile = require("../res/powerup.wav");
 const rocketFile = require("../res/rocket.wav");
+const needleFile = require("../res/needle.png");
 
 export const loader = new ex.Loader();
 function loadAll(resMap: Record<string, ex.Loadable>) {
@@ -22,7 +23,8 @@ export const Images: { [key: string]: ex.Texture } = {
   fighter: new ex.Texture(fighterFile),
   enemyPink: new ex.Texture(enemyFile),
   explosion: new ex.Texture(spriteexplosionFile),
-  sheet: new ex.Texture(gameSheetFile)
+  sheet: new ex.Texture(gameSheetFile),
+  needle: new ex.Texture(needleFile)
 };
 loadAll(Images);
 
@@ -50,3 +52,10 @@ export const gameSheet = new ex.SpriteSheet(
   32.0,
   32.0
 );
+export const needleSheet = new ex.SpriteSheet(
+  Images.needle,
+  3,
+  1,
+  50.0,
+  170.0
+)

@@ -12,7 +12,7 @@ export class Game extends ex.Scene {
   onInitialize(engine: ex.Engine) {
     engine.add(animManager);
 
-    const ship = new Ship(engine.halfDrawWidth, 800, 80, 80);
+    const ship = new Ship(engine.halfDrawWidth, 800, 50, 170);
     engine.add(ship);
 
     const healthBar = new HealthBar();

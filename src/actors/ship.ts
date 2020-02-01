@@ -1,5 +1,5 @@
 import * as ex from "excalibur";
-import { gameSheet, Sounds, explosionSpriteSheet } from "../resources";
+import { gameSheet, Sounds, explosionSpriteSheet, needleSheet } from "../resources";
 import Config from "../config";
 import { Bullet } from "./bullet";
 import { Baddie } from "./baddie";
@@ -55,8 +55,8 @@ export class Ship extends ex.Actor {
     );
 
     // Get animation
-    const anim = gameSheet.getAnimationByIndices(engine, [0, 1, 2], 100);
-    anim.scale = new ex.Vector(4, 4);
+    const anim = needleSheet.getAnimationByIndices(engine, [0, 1, 2], 125);
+    anim.scale = new ex.Vector(1, 1);
     this.addDrawing("default", anim);
 
     this.explode = explosionSpriteSheet.getAnimationForAll(engine, 40);
