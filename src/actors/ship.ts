@@ -46,9 +46,9 @@ export class Ship extends ex.Actor {
     // });
 
     // Pointer
-    engine.input.pointers.primary.on("down", evt =>
-      this.handlePointerEvent(engine, <ex.Input.PointerDownEvent>evt)
-    );
+    // engine.input.pointers.primary.on("down", evt =>
+    //   this.handlePointerEvent(engine, <ex.Input.PointerDownEvent>evt)
+    // );
     // engine.input.pointers.primary.on(
     //   "up",
     //   () => (this.vel = ex.Vector.Zero.clone())
