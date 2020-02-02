@@ -1,11 +1,12 @@
-import { Actor, Color, Vector, Engine } from "excalibur";
+import { Actor, Color, Vector, Engine, CollisionType } from "excalibur";
 
 interface StarOptions {
   randomX: boolean;
+  useVelocity: boolean;
 }
 
 export function getStar(engine: Engine, opts?: Partial<StarOptions>) {
-  const size = Math.round(Math.random() * 4);
+  const size = Math.round(Math.random() * 4) + 1;
   const y = Math.round(Math.random() * engine.canvasHeight);
   const x = opts && opts.randomX ?  Math.round(Math.random() * engine.canvasWidth) : engine.canvasWidth;
   const colorVal = Math.round(Math.random() * 50) + 200;
@@ -26,7 +27,10 @@ export function getStar(engine: Engine, opts?: Partial<StarOptions>) {
   const green = (redMod || blueMod) ? 0 : colorVal;
   const alpha = (redMod || blueMod) ? 0.35 : 1;
   instance.color = new Color(red, green, blue, alpha);
-  instance.vel = new Vector(vel, 0);
+
+  if (opts && opts.useVelocity) {
+    instance.vel = new Vector(vel, 0);
+  }
 
   instance.on('postdraw', () => {
     if (instance.isOffScreen) {

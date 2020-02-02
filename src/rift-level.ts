@@ -10,13 +10,9 @@ export class RiftLevel extends ex.Scene {
   onInitialize(engine: ex.Engine) {
     engine.add(animManager);
 
-    for (let i = 0; i < 180; i++) {
+    for (let i = 0; i < 90; i++) {
       engine.add(getStar(engine, { randomX: true }))
     }
-
-    setInterval(() => {
-      engine.add(getStar(engine));
-    }, 400);
 
     addRift(engine);
     const ship = new Ship(engine, engine.halfDrawWidth, 800, 50, 137);
