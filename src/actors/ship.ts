@@ -172,8 +172,32 @@ export class Ship extends ex.Actor {
     }
   };
 
-  handleMovement = (engine: ex.Engine) => {
-    let dir = ex.Vector.Zero.clone();
+  private handleMovement(engine: ex.Engine) {
+    const keyDir = this.getDirFromKeys(engine);
+    if (keyDir.distance()) {
+      this.logger.debug("applying key input");
+      this.applyInput(keyDir);
+      return;
+    }
+
+    const touchDir = this.getDirFromTouch(engine);
+    if (touchDir.distance()) {
+      this.logger.debug("applying touch input");
+      this.applyInput(touchDir);
+    }
+  }
+
+  private applyInput(input: Vector) {
+    this.vel = input
+      .scale(Config.playerSpeed)
+      .average(this.vel.scale(Config.playerSmoothness))
+      .normalize()
+      .scale(Config.playerSpeed);
+    this.rotation = this.vel.toAngle() + Math.PI / 2;
+  }
+
+  private getDirFromKeys(engine: Engine) {
+    const dir = ex.Vector.Zero.clone();
     // Some keys do the same thing
     if (
       engine.input.keyboard.isHeld(ex.Input.Keys.Up) ||
@@ -202,16 +226,19 @@ export class Ship extends ex.Actor {
     ) {
       dir.y += 1;
     }
+    return dir;
+  }
 
-    if (dir.x !== 0 || dir.y !== 0) {
-      this.vel = dir
-        .scale(Config.playerSpeed)
-        .average(this.vel.scale(Config.playerSmoothness))
-        .normalize()
-        .scale(Config.playerSpeed);
-      this.rotation = this.vel.toAngle() + Math.PI / 2;
+  private getDirFromTouch(engine: Engine) {
+    const pointer = engine.input.pointers.primary;
+
+    if (pointer.isDragging) {
+      if (!pointer.isActorUnderPointer(this)) {
+        return pointer.lastWorldPos.sub(this.pos).normalize();
+      }
     }
-  };
+    return Vector.Zero;
+  }
 
   /**
    * Returns a vector that matches the thread location
