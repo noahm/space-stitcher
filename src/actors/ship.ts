@@ -37,7 +37,13 @@ export class Ship extends ex.Actor {
   private currentThread: SpaceThread | null;
   private engine: Engine;
 
-  constructor(engine: Engine, x: number, y: number, width: number, height: number) {
+  constructor(
+    engine: Engine,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ) {
     super({
       pos: new ex.Vector(x, y),
       width: width,
@@ -80,8 +86,8 @@ export class Ship extends ex.Actor {
   }
 
   onCollisionEnd(evt: CollisionEndEvent) {
-    if (evt.other === this.targetedEdge) {
-      if (this.isInsideRift) {
+    if (evt.other instanceof RiftEdge) {
+      if (this.isInsideRift && !this.currentThread) {
         // by the time this event bubbles, the current thread
         // attach point is a few pixels away from the actual
         // targeted edge. Need to do some math to extend the current
@@ -91,8 +97,10 @@ export class Ship extends ex.Actor {
         this.engine.add(this.currentThread);
       }
 
-      this.targetedEdge.color = Color.Red;
-      this.targetedEdge = undefined;
+      if (evt.other === this.targetedEdge) {
+        this.targetedEdge.color = Color.Red;
+        this.targetedEdge = undefined;
+      }
     } else if (evt.other instanceof Rift) {
       this.isInsideRift = false;
 
@@ -220,20 +228,20 @@ export class Ship extends ex.Actor {
 
     let bottomLeft = new Vector(
       worldPos.x - drawingWidth / 2,
-      worldPos.y + drawingHeight / 2,
+      worldPos.y + drawingHeight / 2
     );
     bottomLeft = bottomLeft.rotate(this.rotation, this.center);
 
     let bottomRight = new Vector(
       worldPos.x + drawingWidth / 2,
-      worldPos.y + drawingHeight / 2,
+      worldPos.y + drawingHeight / 2
     );
     bottomRight = bottomRight.rotate(this.rotation, this.center);
 
     const attachPoint = new Vector(
-      (bottomLeft.x + bottomRight.x)/2,
-      (bottomLeft.y + bottomRight.y)/2
-    )
+      (bottomLeft.x + bottomRight.x) / 2,
+      (bottomLeft.y + bottomRight.y) / 2
+    );
 
     return attachPoint;
   }

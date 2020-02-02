@@ -1,4 +1,4 @@
-import { Vector, Color, Actor } from "excalibur";
+import { Vector, Color, Actor, Util } from "excalibur";
 import { Ship } from "./ship";
 
 const colors = [
@@ -46,15 +46,15 @@ export class SpaceThread extends Actor {
     ctx.moveTo(this.startPoint.x, this.startPoint.y);
 
     // Knot
-    ctx.arc(this.startPoint.x, this.startPoint.y, 5, 0, Math.PI * 2);
+    ctx.arc(this.startPoint.x, this.startPoint.y, 5, 0, Util.TwoPI);
 
     if (this.endPoint) {
       ctx.lineTo(this.endPoint.x, this.endPoint.y);
-      ctx.arc(this.endPoint.x, this.endPoint.y, 5, 0, Math.PI * 2);
+      ctx.arc(this.endPoint.x, this.endPoint.y, 5, 0, Util.TwoPI);
     } else {
       const { x, y } = this.ship.getThreadAttachPoint();
       ctx.lineTo(x, y);
-      ctx.arc(x, y, 2, 0, Math.PI * 2);
+      ctx.arc(x, y, 2, 0, Util.TwoPI);
     }
     ctx.stroke();
     ctx.closePath();
