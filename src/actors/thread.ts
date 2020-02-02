@@ -21,7 +21,7 @@ export class SpaceThread extends Actor {
   draw(ctx: CanvasRenderingContext2D, delta: number) {
     ctx.beginPath();
     ctx.strokeStyle = Color.Magenta.toString();
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 4;
     ctx.lineJoin = "round";
     ctx.lineCap = "round";
 

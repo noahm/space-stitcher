@@ -10,7 +10,7 @@ const explodeFile = require("../res/explode.wav");
 const hitFile = require("../res/hit.wav");
 const powerupFile = require("../res/powerup.wav");
 const rocketFile = require("../res/rocket.wav");
-const needleFile = require("../res/needle.png");
+const needleFile = require("../res/needle_2.png");
 
 export const loader = new ex.Loader();
 loader.backgroundColor = "black";
@@ -58,4 +58,4 @@ export const gameSheet = new ex.SpriteSheet(
   32.0,
   32.0
 );
-export const needleSheet = new ex.SpriteSheet(Images.needle, 3, 1, 50.0, 170.0);
+export const needleSheet = new ex.SpriteSheet(Images.needle, 1, 1, 50.0, 137.0);

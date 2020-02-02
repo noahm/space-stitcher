@@ -47,7 +47,7 @@ export class Ship extends ex.Actor {
     this.on("collisionend", this.onCollisionEnd);
 
     // Get animation
-    const anim = needleSheet.getAnimationByIndices(engine, [0, 1, 2], 125);
+    const anim = needleSheet.getSprite(0);
     anim.scale = new ex.Vector(1, 1);
     this.addDrawing("default", anim);
 
