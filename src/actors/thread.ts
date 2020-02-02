@@ -1,6 +1,7 @@
 import { Vector, Color, Actor, Util } from "excalibur";
 import { Ship } from "./ship";
 import { RiftEdge } from "./rift-edge";
+import { stats } from "../stats";
 
 const hueRotationDistance = 0.28;
 let nextHue = Math.random();
@@ -9,7 +10,7 @@ export class SpaceThread extends Actor {
   private startPoint: Vector;
   private ship: Ship;
   private endPoint: Vector | null;
-  private threadColor: string;
+  private threadColor: Color;
   private startEdge: RiftEdge;
 
   constructor(ship: Ship, startPoint: Vector, startEdge: RiftEdge) {
@@ -20,7 +21,7 @@ export class SpaceThread extends Actor {
     });
     this.startEdge = startEdge;
 
-    this.threadColor = Color.fromHSL(nextHue, 0.7, 0.6).toString();
+    this.threadColor = Color.fromHSL(nextHue, 0.7, 0.6);
     nextHue = (nextHue + hueRotationDistance) % 1;
 
     this.ship = ship;
@@ -28,9 +29,20 @@ export class SpaceThread extends Actor {
     this.endPoint = null;
   }
 
+  onPreUpdate() {
+    if (stats.remainingEdges === 0) {
+      this.actions.fade(0, 1000);
+    }
+  }
+
   draw(ctx: CanvasRenderingContext2D, delta: number) {
     ctx.beginPath();
-    ctx.strokeStyle = this.threadColor;
+    ctx.strokeStyle = Color.fromRGB(
+      this.threadColor.r,
+      this.threadColor.g,
+      this.threadColor.b,
+      this.opacity
+    ).toRGBA();
     ctx.lineWidth = 4;
     ctx.lineJoin = "round";
     ctx.lineCap = "round";

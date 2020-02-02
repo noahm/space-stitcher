@@ -3,6 +3,7 @@ import * as ex from "excalibur";
 import Config from "./config";
 import { Sounds, loader } from "./resources";
 import { RiftLevel } from "./rift-level";
+import { stats } from "./stats";
 
 const engine = new ex.Engine({
   backgroundColor: ex.Color.Green,
@@ -26,7 +27,7 @@ document.onvisibilitychange = () => {
     console.log("visible - starting");
     engine.start();
   }
-}
+};
 
 engine.input.keyboard.on("press", (evt: ex.Input.KeyEvent) => {
   if (evt.key === ex.Input.Keys.Z) {

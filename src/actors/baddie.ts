@@ -33,7 +33,7 @@ export class Baddie extends ex.Actor {
   // OnInitialize is called before the 1st actor update
   onInitialize(engine: ex.Engine) {
     // Initialize actor
-    console.log( this.pos);
+    console.log(this.pos);
     // Setup visuals
     this.anim = gameSheet.getAnimationByIndices(engine, [10, 11, 12], 100);
     this.anim.scale = new ex.Vector(4, 4);
@@ -44,10 +44,10 @@ export class Baddie extends ex.Actor {
     this.explode.loop = false;
 
     // Setup patrolling behavior
-    this.actions
-      // .moveTo(this.pos.x, this.pos.y + 200, Config.enemySpeed)
-      // .moveTo(this.pos.x, this.pos.y - 200, Config.enemySpeed)
-      // .repeatForever();
+    this.actions;
+    // .moveTo(this.pos.x, this.pos.y + 200, Config.enemySpeed)
+    // .moveTo(this.pos.x, this.pos.y - 200, Config.enemySpeed)
+    // .repeatForever();
 
     // Setup firing timer, repeats forever
     this.fireTimer = new ex.Timer(
@@ -73,7 +73,7 @@ export class Baddie extends ex.Actor {
         animManager.play(this.explode, this.pos);
       }
 
-      stats.score += 100;
+      // stats.score += 100;
       if (this.fireTimer) {
         this.fireTimer.cancel();
       }
@@ -82,7 +82,10 @@ export class Baddie extends ex.Actor {
   }
 
   private fire(engine: ex.Engine) {
-    this.fireAngle = Math.atan2(this.pos.y - this.test.pos.y, this.pos.x - this.test.pos.x);
+    this.fireAngle = Math.atan2(
+      this.pos.y - this.test.pos.y,
+      this.pos.x - this.test.pos.x
+    );
     const bulletVelocity = new ex.Vector(
       Config.enemyBulletVelocity * Math.cos(this.fireAngle),
       Config.enemyBulletVelocity * Math.sin(this.fireAngle)

@@ -117,7 +117,6 @@ export class Ship extends ex.Actor {
 
   onPreUpdate(engine: Engine, delta: number) {
     this.handleMovement(engine);
-    this.handleStitch(engine);
   }
 
   onPostUpdate(engine: ex.Engine, delta: number) {
@@ -214,12 +213,6 @@ export class Ship extends ex.Actor {
     }
   };
 
-  handleStitch(engine: Engine) {
-    if (!engine.input.keyboard.isHeld(Input.Keys.Space)) {
-      return;
-    }
-  }
-
   /**
    * Returns a vector that matches the thread location
    * from the Space Needle sprite sheet, regardless of
@@ -234,14 +227,15 @@ export class Ship extends ex.Actor {
       worldPos.x - drawingWidth / 2,
       worldPos.y + drawingHeight / 2
     );
-    bottomLeft = bottomLeft.rotate(this.rotation, this.center);
+    // bottomLeft = bottomLeft.rotate(this.rotation, this.center);
 
     let bottomRight = new Vector(
       worldPos.x + drawingWidth / 2,
       worldPos.y + drawingHeight / 2
     );
-    bottomRight = bottomRight.rotate(this.rotation, this.center);
+    // bottomRight = bottomRight.rotate(this.rotation, this.center);
 
+    return bottomLeft.average(bottomRight).rotate(this.rotation, this.center);
     const attachPoint = new Vector(
       (bottomLeft.x + bottomRight.x) / 2,
       (bottomLeft.y + bottomRight.y) / 2
