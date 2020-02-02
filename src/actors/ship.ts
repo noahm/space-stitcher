@@ -91,12 +91,22 @@ export class Ship extends ex.Actor {
     // Decay velocity
     this.vel.scaleEqual(0.9);
     // Keep player in the viewport
-    if (this.pos.x < 0) this.pos.x = 0;
-    if (this.pos.y < 0) this.pos.y = 0;
-    if (this.pos.x > engine.drawWidth - this.width)
-      this.pos.x = engine.drawWidth - this.width;
-    if (this.pos.y > engine.drawHeight - this.height)
-      this.pos.y = engine.drawHeight - this.height;
+    if (this.pos.x < 0) {
+      this.pos.x = 0;
+      this.vel.x = 0;
+    }
+    if (this.pos.y < 0) {
+      this.pos.y = 0;
+      this.vel.y = 0;
+    }
+    if (this.pos.x > engine.drawWidth) {
+      this.pos.x = engine.drawWidth;
+      this.vel.x = 0;
+    }
+    if (this.pos.y > engine.drawHeight) {
+      this.pos.y = engine.drawHeight;
+      this.vel.y = 0;
+    }
   }
 
   private fire = (engine: ex.Engine) => {
