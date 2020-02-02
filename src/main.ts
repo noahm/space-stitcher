@@ -4,6 +4,7 @@ import Config from "./config";
 import { Sounds, loader } from "./resources";
 import { RiftLevel } from "./rift-level";
 import { stats } from "./stats";
+import { Logger, LogLevel } from "excalibur";
 
 const engine = new ex.Engine({
   backgroundColor: ex.Color.Green,
@@ -32,6 +33,11 @@ document.onvisibilitychange = () => {
 engine.input.keyboard.on("press", (evt: ex.Input.KeyEvent) => {
   if (evt.key === ex.Input.Keys.Z) {
     engine.isDebug = !engine.isDebug;
+    if (engine.isDebug) {
+      Logger.getInstance().defaultLevel = LogLevel.Debug;
+    } else {
+      Logger.getInstance().defaultLevel = LogLevel.Info;
+    }
   }
 });
 
