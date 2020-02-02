@@ -5,12 +5,10 @@ import { RiftEdge } from "./rift-edge";
 import { Ship } from "./ship";
 
 const points = [
-  new ex.Vector(68, 299),
-  new ex.Vector(255, 192),
-  new ex.Vector(499, 161),
-  new ex.Vector(767, 280),
-  new ex.Vector(472, 505),
-  new ex.Vector(215, 416)
+  new ex.Vector(50, 50),
+  new ex.Vector(50, 200),
+  new ex.Vector(200, 200),
+  new ex.Vector(200, 50)
 ];
 
 export function addRift(engine: Engine) {
@@ -23,7 +21,7 @@ export function addRift(engine: Engine) {
   }
 }
 
-class Rift extends ex.Actor {
+export class Rift extends ex.Actor {
   private polygon: Polygon;
   private isInsideRift: boolean;
 

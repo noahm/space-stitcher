@@ -136,10 +136,6 @@ export class Ship extends ex.Actor {
     let dir = ex.Vector.Zero.clone();
 
     if (evt.key === ex.Input.Keys.Space) {
-      this.throttleFire ? this.throttleFire(engine) : null;
-      if (this.vel.x !== 0 || this.vel.y !== 0) {
-        dir = this.vel.normalize();
-      }
     }
     // Some keys do the same thing
     if (evt.key === ex.Input.Keys.Up || evt.key === ex.Input.Keys.W) {

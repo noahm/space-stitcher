@@ -5,7 +5,7 @@ import { Sounds, loader } from "./resources";
 import { RiftLevel } from "./rift-level";
 
 const engine = new ex.Engine({
-  backgroundColor: ex.Color.Black,
+  backgroundColor: ex.Color.Green,
   displayMode: ex.DisplayMode.Fixed,
   height: 600,
   width: 800

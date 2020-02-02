@@ -2,6 +2,8 @@ import * as ex from "excalibur";
 import Config from "../config";
 import { gameSheet } from "../resources";
 import { Baddie } from "./baddie";
+import { Rift } from "./rift";
+import { RiftEdge } from "./rift-edge";
 
 export class Bullet extends ex.Actor {
   public owner?: ex.Actor;
@@ -31,7 +33,7 @@ export class Bullet extends ex.Actor {
   }
 
   private onPreCollision(evt: ex.PreCollisionEvent) {
-    if (!(evt.other instanceof Bullet) && evt.other !== this.owner) {
+    if (!(evt.other instanceof Bullet || evt.other instanceof Rift || evt.other instanceof RiftEdge) && evt.other !== this.owner) {
       this.killAndRemoveFromBullets();
     }
   }

@@ -4,6 +4,7 @@ import Config from "../config";
 import { Bullet } from "./bullet";
 import { animManager } from "./animation-manager";
 import { stats } from "../stats";
+import { Ship } from "./ship";
 
 export class Baddie extends ex.Actor {
   // All bullets belonging to baddies
@@ -11,15 +12,17 @@ export class Baddie extends ex.Actor {
 
   private anim?: ex.Animation;
   private explode?: ex.Animation;
+  private test: Ship;
   private fireTimer?: ex.Timer;
   private fireAngle: number = Math.random() * Math.PI * 2;
-  constructor(x: number, y: number, width: number, height: number) {
+  constructor(x: number, y: number, width: number, height: number, ship: Ship) {
     super({
       pos: new ex.Vector(x, y),
       width: width,
       height: height
     });
 
+    this.test = ship;
     // Passive recieves collision events but does not participate in resolution
     this.body.collider.type = ex.CollisionType.Passive;
 
@@ -30,7 +33,7 @@ export class Baddie extends ex.Actor {
   // OnInitialize is called before the 1st actor update
   onInitialize(engine: ex.Engine) {
     // Initialize actor
-
+    console.log( this.pos);
     // Setup visuals
     this.anim = gameSheet.getAnimationByIndices(engine, [10, 11, 12], 100);
     this.anim.scale = new ex.Vector(4, 4);
@@ -42,11 +45,9 @@ export class Baddie extends ex.Actor {
 
     // Setup patrolling behavior
     this.actions
-      .moveTo(this.pos.x, this.pos.y + 800, Config.enemySpeed)
-      .moveTo(this.pos.x + 800, this.pos.y, Config.enemySpeed)
-      .moveTo(this.pos.x + 800, this.pos.y + 800, Config.enemySpeed)
-      .moveTo(this.pos.x, this.pos.y, Config.enemySpeed)
-      .repeatForever();
+      // .moveTo(this.pos.x, this.pos.y + 200, Config.enemySpeed)
+      // .moveTo(this.pos.x, this.pos.y - 200, Config.enemySpeed)
+      // .repeatForever();
 
     // Setup firing timer, repeats forever
     this.fireTimer = new ex.Timer(
@@ -81,7 +82,7 @@ export class Baddie extends ex.Actor {
   }
 
   private fire(engine: ex.Engine) {
-    this.fireAngle += Math.PI / 20;
+    this.fireAngle = Math.atan2(this.pos.y - this.test.pos.y, this.pos.x - this.test.pos.x);
     const bulletVelocity = new ex.Vector(
       Config.enemyBulletVelocity * Math.cos(this.fireAngle),
       Config.enemyBulletVelocity * Math.sin(this.fireAngle)
