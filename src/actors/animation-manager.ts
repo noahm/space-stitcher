@@ -11,8 +11,7 @@ export class AnimationManager extends ex.Actor {
     super({
       pos: ex.Vector.Zero,
       width: 0,
-      height: 0,
-      collisionType: ex.CollisionType.PreventCollision
+      height: 0
     });
     this.traits.length = 0;
   }
