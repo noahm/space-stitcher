@@ -4,12 +4,12 @@ import { eachCircularNeighbor } from "../utils";
 import { RiftEdge } from "./rift-edge";
 
 const points = [
-  new ex.Vector(88, 66),
-  new ex.Vector(148, 33),
-  new ex.Vector(244, 37),
-  new ex.Vector(291, 78),
-  new ex.Vector(218, 119),
-  new ex.Vector(120, 129)
+  new ex.Vector(68, 299),
+  new ex.Vector(255, 192),
+  new ex.Vector(499, 161),
+  new ex.Vector(767, 280),
+  new ex.Vector(472, 505),
+  new ex.Vector(215, 416)
 ];
 
 export function addRift(engine: Engine) {
