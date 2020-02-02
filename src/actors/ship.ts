@@ -1,5 +1,5 @@
 import * as ex from "excalibur";
-import { gameSheet, Sounds, explosionSpriteSheet, needleSheet } from "../resources";
+import { Sounds, explosionSpriteSheet, needleSheet } from "../resources";
 import Config from "../config";
 import { Bullet } from "./bullet";
 import { Baddie } from "./baddie";
@@ -39,20 +39,20 @@ export class Ship extends ex.Actor {
 
     // Keyboard
     engine.input.keyboard.on("hold", evt => this.handleKeyEvent(engine, evt));
-    engine.input.keyboard.on("release", (evt: ex.Input.KeyEvent) => {
-      if (evt.key !== ex.Input.Keys.Space) {
-        this.vel = ex.Vector.Zero.clone();
-      }
-    });
+    // engine.input.keyboard.on("release", (evt: ex.Input.KeyEvent) => {
+    //   if (evt.key !== ex.Input.Keys.Space) {
+    //     this.vel = ex.Vector.Zero.clone();
+    //   }
+    // });
 
     // Pointer
     engine.input.pointers.primary.on("down", evt =>
       this.handlePointerEvent(engine, <ex.Input.PointerDownEvent>evt)
     );
-    engine.input.pointers.primary.on(
-      "up",
-      () => (this.vel = ex.Vector.Zero.clone())
-    );
+    // engine.input.pointers.primary.on(
+    //   "up",
+    //   () => (this.vel = ex.Vector.Zero.clone())
+    // );
 
     // Get animation
     const anim = needleSheet.getAnimationByIndices(engine, [0, 1, 2], 125);
@@ -88,6 +88,8 @@ export class Ship extends ex.Actor {
       this.kill();
     }
 
+    // Decay velocity
+    this.vel.scaleEqual(0.9);
     // Keep player in the viewport
     if (this.pos.x < 0) this.pos.x = 0;
     if (this.pos.y < 0) this.pos.y = 0;
@@ -147,7 +149,12 @@ export class Ship extends ex.Actor {
     }
 
     if (dir.x !== 0 || dir.y !== 0) {
-      this.vel = dir.normalize().scale(Config.playerSpeed);
+      this.vel = dir
+        .scale(Config.playerSpeed)
+        .average(this.vel.scale(10))
+        .normalize()
+        .scale(Config.playerSpeed);
+      this.rotation = this.vel.toAngle() + Math.PI / 2;
     }
   };
 }

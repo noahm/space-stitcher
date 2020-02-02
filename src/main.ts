@@ -28,7 +28,7 @@ engine.on("visible", () => {
 });
 
 engine.input.keyboard.on("press", (evt: ex.Input.KeyEvent) => {
-  if (evt.key === ex.Input.Keys.D) {
+  if (evt.key === ex.Input.Keys.Z) {
     engine.isDebug = !engine.isDebug;
   }
 });
