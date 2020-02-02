@@ -18,6 +18,7 @@ export class RiftEdge extends Actor {
       pos: midpoint(p1, p2),
       rotation: angleOfLine(p1, p2),
       color: Color.Red,
+      opacity: 0.7,
       height: 10,
       width: length(p1, p2)
     });

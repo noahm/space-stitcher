@@ -24,26 +24,27 @@ export function addRift(engine: Engine) {
   for (const [p1, p2] of eachCircularNeighbor(points)) {
     const edge = new RiftEdge(p1, p2);
     edges.push(edge);
-    engine.add(edge);
   }
   engine.add(new Rift(points, edges));
-
+  edges.forEach(edge => engine.add(edge));
   stats.remainingEdges = points.length;
 }
 
 export class Rift extends Actor {
   private edges: RiftEdge[];
+  private polygon: Polygon;
+
   constructor(points: Vector[], edges: RiftEdge[]) {
     const polygon = new Polygon(points);
     polygon.lineColor = Color.Transparent;
-    polygon.fillColor = Color.LightGray;
     polygon.filled = true;
     polygon.lineWidth = 0;
 
     super({
       pos: new Vector(polygon.width / 2, polygon.height / 2),
       width: polygon.width,
-      height: polygon.height
+      height: polygon.height,
+      opacity: 0.8
     });
 
     this.edges = edges;
@@ -54,6 +55,7 @@ export class Rift extends Actor {
       new Vector(polygon.width / -2, polygon.height / -2)
     );
     this.body.collider.type = CollisionType.Passive;
+    this.polygon = polygon;
   }
 
   onPreUpdate() {
@@ -64,5 +66,6 @@ export class Rift extends Actor {
       }
       this.actions.scaleTo(0, 0, 0.5, 0.5).die();
     }
+    this.polygon.fillColor = Color.fromRGB(50, 50, 50, this.opacity);
   }
 }
