@@ -13,9 +13,13 @@ export class RiftLevel extends Scene {
       engine.add(getStar(engine, { randomX: true, useVelocity: true }));
     }
 
-    const starTimer = new Timer(() => {
-      engine.add(getStar(engine, { useVelocity: true }));
-    }, 800);
+    const starTimer = new Timer(
+      () => {
+        engine.add(getStar(engine, { useVelocity: true }));
+      },
+      800,
+      true
+    );
     engine.add(starTimer);
 
     addRift(engine);
