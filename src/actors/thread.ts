@@ -2,18 +2,8 @@ import { Vector, Color, Actor, Util } from "excalibur";
 import { Ship } from "./ship";
 import { RiftEdge } from "./rift-edge";
 
-const colors = [
-  Color.Azure,
-  Color.Chartreuse,
-  Color.Magenta,
-  Color.Rose,
-  Color.Orange,
-  Color.Viridian,
-  Color.Violet,
-  Color.Vermillion,
-  Color.Cyan,
-  Color.Yellow
-];
+const hueRotationDistance = 0.28;
+let nextHue = Math.random();
 
 export class SpaceThread extends Actor {
   private startPoint: Vector;
@@ -30,8 +20,8 @@ export class SpaceThread extends Actor {
     });
     this.startEdge = startEdge;
 
-    const colorIdx = Math.floor(Math.random() * colors.length);
-    this.threadColor = colors[colorIdx].toString();
+    this.threadColor = Color.fromHSL(nextHue, 0.7, 0.6).toString();
+    nextHue = (nextHue + hueRotationDistance) % 1;
 
     this.ship = ship;
     this.startPoint = startPoint;
