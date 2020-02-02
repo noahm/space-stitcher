@@ -5,6 +5,7 @@ import { Bullet } from "./bullet";
 import { Baddie } from "./baddie";
 import { animManager } from "./animation-manager";
 import { stats } from "../stats";
+import { Vector } from "excalibur";
 
 type FireFunction = (engine: ex.Engine) => void;
 function throttle(func: FireFunction, throttle: number): FireFunction {
@@ -62,6 +63,36 @@ export class Ship extends ex.Actor {
     this.explode = explosionSpriteSheet.getAnimationForAll(engine, 40);
     this.explode.scale = new ex.Vector(3, 3);
     this.explode.loop = false;
+  }
+
+  /**
+   * Returns a vector that matches the thread location
+   * from the Space Needle sprite sheet, regardless of
+   * rotation or orientation.
+   */
+  getThreadAttachPoint() {
+    const drawingWidth = this.currentDrawing.drawWidth;
+    const drawingHeight = this.currentDrawing.drawHeight;
+    const worldPos = this.getWorldPos();
+
+    let bottomLeft = new Vector(
+      worldPos.x - drawingWidth / 2,
+      worldPos.y + drawingHeight / 2,
+    );
+    bottomLeft = bottomLeft.rotate(this.rotation, this.center);
+
+    let bottomRight = new Vector(
+      worldPos.x + drawingWidth / 2,
+      worldPos.y + drawingHeight / 2,
+    );
+    bottomRight = bottomRight.rotate(this.rotation, this.center);
+
+    const attachPoint = new Vector(
+      (bottomLeft.x + bottomRight.x)/2,
+      (bottomLeft.y + bottomRight.y)/2
+    )
+
+    return attachPoint;
   }
 
   onPreCollision(evt: ex.PreCollisionEvent) {

@@ -3,6 +3,7 @@ import { Vector, CollisionType, Engine, CollisionStartEvent, Color, CollisionEnd
 import { eachCircularNeighbor } from "../utils";
 import { RiftEdge } from "./rift-edge";
 import { Ship } from "./ship";
+import { SpaceThread } from "./thread";
 
 const points = [
   new ex.Vector(68, 299),
@@ -14,7 +15,7 @@ const points = [
 ];
 
 export function addRift(engine: Engine) {
-  engine.add(new Rift(points));
+  engine.add(new Rift(points, engine));
 
   for (const [p1, p2] of eachCircularNeighbor(points)) {
     const edge = new RiftEdge(p1, p2);
@@ -26,8 +27,10 @@ export function addRift(engine: Engine) {
 class Rift extends ex.Actor {
   private polygon: Polygon;
   private isInsideRift: boolean;
+  private thread: SpaceThread | null;
+  private engine: Engine;
 
-  constructor(points: Vector[]) {
+  constructor(points: Vector[], engine: Engine) {
     const polygon = new ex.Polygon(points);
     polygon.lineColor = Color.Transparent;
     polygon.fillColor = Color.LightGray;
@@ -42,6 +45,8 @@ class Rift extends ex.Actor {
 
     this.polygon = polygon;
     this.isInsideRift = false;
+    this.thread = null;
+    this.engine = engine;
 
     this.addDrawing("shape", polygon);
     this.body.usePolygonCollider(points, new Vector(polygon.width / -2, polygon.height / -2));
@@ -55,8 +60,10 @@ class Rift extends ex.Actor {
 
   collisionStart(evt: CollisionStartEvent) {
     if (evt.other instanceof Ship) {
-      this.polygon.fillColor = Color.Magenta;
+      // this.polygon.fillColor = Color.Magenta;
       this.isInsideRift = true;
+      this.thread = new SpaceThread(evt.other);
+      this.engine.add(this.thread);
     }
   }
 
@@ -64,6 +71,10 @@ class Rift extends ex.Actor {
     if (evt.other instanceof Ship) {
       this.polygon.fillColor = Color.LightGray;
       this.isInsideRift = false;
+
+      if (this.thread) {
+        this.thread.anchorThread();
+      }
     }
   }
 }
