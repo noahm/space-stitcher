@@ -17,15 +17,16 @@ engine.setAntialiasing(false);
 engine.add("game", new RiftLevel(engine));
 engine.goToScene("game");
 
-// Game events to handle
-engine.on("hidden", () => {
-  console.log("pause");
-  engine.stop();
-});
-engine.on("visible", () => {
-  console.log("start");
-  engine.start();
-});
+// Visibility changes pausing/restarting the game
+document.onvisibilitychange = () => {
+  if (document.hidden) {
+    console.log("hidden - pausing");
+    engine.stop();
+  } else {
+    console.log("visible - starting");
+    engine.start();
+  }
+}
 
 engine.input.keyboard.on("press", (evt: ex.Input.KeyEvent) => {
   if (evt.key === ex.Input.Keys.Z) {
