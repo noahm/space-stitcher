@@ -28,7 +28,7 @@ export function getStarField(engine: Engine) {
   emitter.emitRate = 8;
   emitter.opacity = 0.68;
   emitter.fadeFlag = false;
-  emitter.particleLife = 5445;
+  emitter.particleLife = 15445;
   emitter.maxSize = 3;
   emitter.minSize = 1;
   emitter.startSize = 0;
