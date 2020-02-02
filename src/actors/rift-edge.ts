@@ -42,4 +42,11 @@ export class RiftEdge extends Actor {
       this.color = Color.Red;
     }
   }
+
+  markUsed() {
+    this.color = Color.Gray;
+  }
+
+  markTarget() {}
+  unmarkTarget() {}
 }

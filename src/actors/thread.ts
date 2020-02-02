@@ -1,5 +1,6 @@
 import { Vector, Color, Actor, Util } from "excalibur";
 import { Ship } from "./ship";
+import { RiftEdge } from "./rift-edge";
 
 const colors = [
   Color.Azure,
@@ -19,13 +20,15 @@ export class SpaceThread extends Actor {
   private ship: Ship;
   private endPoint: Vector | null;
   private threadColor: string;
+  private startEdge: RiftEdge;
 
-  constructor(ship: Ship, startPoint: Vector) {
+  constructor(ship: Ship, startPoint: Vector, startEdge: RiftEdge) {
     super({
       pos: ship.center,
       width: 10,
       height: 10
     });
+    this.startEdge = startEdge;
 
     const colorIdx = Math.floor(Math.random() * colors.length);
     this.threadColor = colors[colorIdx].toString();
@@ -60,7 +63,12 @@ export class SpaceThread extends Actor {
     ctx.closePath();
   }
 
-  anchorThread() {
+  anchorThread(anchorEdge: RiftEdge) {
+    if (this.startEdge === anchorEdge) {
+      this.kill();
+      return;
+    }
+    this.startEdge.markUsed();
     this.endPoint = this.ship.getThreadAttachPoint();
   }
 }

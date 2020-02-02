@@ -76,10 +76,10 @@ export class Ship extends ex.Actor {
   onCollisionStart(evt: CollisionStartEvent) {
     if (evt.other instanceof RiftEdge) {
       if (this.targetedEdge) {
-        this.targetedEdge.color = Color.Red;
+        this.targetedEdge.unmarkTarget();
       }
       this.targetedEdge = evt.other;
-      this.targetedEdge.color = Color.Blue;
+      this.targetedEdge.markTarget();
     } else if (evt.other instanceof Rift) {
       this.isInsideRift = true;
     }
@@ -93,19 +93,23 @@ export class Ship extends ex.Actor {
         // targeted edge. Need to do some math to extend the current
         // thread attach point vector to the middle of the
         // targeted edge.
-        this.currentThread = new SpaceThread(this, this.getThreadAttachPoint());
+        this.currentThread = new SpaceThread(
+          this,
+          this.getThreadAttachPoint(),
+          evt.other
+        );
         this.engine.add(this.currentThread);
       }
 
       if (evt.other === this.targetedEdge) {
-        this.targetedEdge.color = Color.Red;
+        this.targetedEdge.unmarkTarget();
         this.targetedEdge = undefined;
       }
     } else if (evt.other instanceof Rift) {
       this.isInsideRift = false;
 
-      if (this.currentThread) {
-        this.currentThread.anchorThread();
+      if (this.currentThread && this.targetedEdge) {
+        this.currentThread.anchorThread(this.targetedEdge);
         this.currentThread = null;
       }
     }
