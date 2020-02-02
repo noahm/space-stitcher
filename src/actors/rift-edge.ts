@@ -1,15 +1,17 @@
 import {
   Actor,
-  Engine,
   Vector,
   CollisionType,
   Color,
-  PreCollisionEvent,
   CollisionEndEvent,
-  CollisionStartEvent
+  CollisionStartEvent,
+  CollisionGroupManager
 } from "excalibur";
 import { midpoint, length, angleOfLine } from "../utils";
 import { Ship } from "./ship";
+
+export const EDGE_COLLIDER = "edge";
+const riftEdgeGroup = CollisionGroupManager.create(EDGE_COLLIDER);
 
 export class RiftEdge extends Actor {
   constructor(p1: Vector, p2: Vector) {
@@ -21,11 +23,12 @@ export class RiftEdge extends Actor {
       width: length(p1, p2)
     });
     this.body.collider.type = CollisionType.Passive;
+    this.body.collider.group = riftEdgeGroup;
   }
 
   onInitialize() {
-    this.on("collisionstart", this.collisionStart);
-    this.on("collisionend", this.collisionEnd);
+    // this.on("collisionstart", this.collisionStart);
+    // this.on("collisionend", this.collisionEnd);
   }
 
   collisionStart(evt: CollisionStartEvent) {
