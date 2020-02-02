@@ -10,7 +10,7 @@ export class RiftLevel extends ex.Scene {
 
     addRift(engine);
 
-    const ship = new Ship(engine.halfDrawWidth, 800, 80, 80);
+    const ship = new Ship(engine.halfDrawWidth, 800, 50, 170);
     engine.add(ship);
   }
 }
