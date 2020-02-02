@@ -13,6 +13,12 @@ const rocketFile = require("../res/rocket.wav");
 const needleFile = require("../res/needle.png");
 
 export const loader = new ex.Loader();
+loader.backgroundColor = "black";
+loader.suppressPlayButton = true;
+loader.logo = require("!!url-loader?limit=false!../res/needle-loader.png");
+loader.logoWidth = 170;
+loader.logoHeight = 49;
+
 function loadAll(resMap: Record<string, ex.Loadable>) {
   for (const res of Object.values(resMap)) {
     loader.addResource(res);
@@ -52,10 +58,4 @@ export const gameSheet = new ex.SpriteSheet(
   32.0,
   32.0
 );
-export const needleSheet = new ex.SpriteSheet(
-  Images.needle,
-  3,
-  1,
-  50.0,
-  170.0
-)
+export const needleSheet = new ex.SpriteSheet(Images.needle, 3, 1, 50.0, 170.0);

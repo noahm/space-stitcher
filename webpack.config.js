@@ -35,7 +35,8 @@ module.exports = {
   },
   plugins: [
     new hwp({
-      title: package.description
+      title: package.description,
+      favicon: "favicon.png"
     })
   ]
 };
