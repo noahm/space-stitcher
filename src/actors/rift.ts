@@ -60,15 +60,9 @@ export class Rift extends Actor {
     if (stats.remainingEdges === 0) {
       stats.gameOver = true;
       for (const edge of this.edges) {
-        edge.actions.fade(0, 1000);
+        edge.actions.fade(0, 500).die();
       }
       this.actions.scaleTo(0, 0, 0.5, 0.5).die();
-    }
-  }
-
-  onPreKill() {
-    for (const edge of this.edges) {
-      edge.kill();
     }
   }
 }

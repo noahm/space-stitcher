@@ -31,7 +31,7 @@ export class SpaceThread extends Actor {
 
   onPreUpdate() {
     if (stats.remainingEdges === 0) {
-      this.actions.fade(0, 1000);
+      this.actions.fade(0, 1000).die();
     }
   }
 
