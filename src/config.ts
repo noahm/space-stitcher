@@ -3,7 +3,8 @@
 const Config = {
   soundVolume: 0.1,
   playerBulletVelocity: -600,
-  playerSpeed: 500,
+  playerSmoothness: 25,
+  playerSpeed: 250,
   playerFireThrottle: 200,
   missileSpeed: -400,
   enemyBulletVelocity: -300,

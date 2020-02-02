@@ -151,7 +151,7 @@ export class Ship extends ex.Actor {
     if (dir.x !== 0 || dir.y !== 0) {
       this.vel = dir
         .scale(Config.playerSpeed)
-        .average(this.vel.scale(10))
+        .average(this.vel.scale(Config.playerSmoothness))
         .normalize()
         .scale(Config.playerSpeed);
       this.rotation = this.vel.toAngle() + Math.PI / 2;
