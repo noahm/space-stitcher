@@ -175,14 +175,12 @@ export class Ship extends ex.Actor {
   private handleMovement(engine: ex.Engine) {
     const keyDir = this.getDirFromKeys(engine);
     if (keyDir.distance()) {
-      this.logger.debug("applying key input");
       this.applyInput(keyDir);
       return;
     }
 
     const touchDir = this.getDirFromTouch(engine);
     if (touchDir.distance()) {
-      this.logger.debug("applying touch input");
       this.applyInput(touchDir);
     }
   }
