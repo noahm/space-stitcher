@@ -13,6 +13,8 @@ import {
   Vector
 } from "excalibur";
 import { RiftEdge, EDGE_COLLIDER } from "./rift-edge";
+import { Rift } from "./rift";
+import { SpaceThread } from "./thread";
 
 type FireFunction = (engine: ex.Engine) => void;
 function throttle(func: FireFunction, throttle: number): FireFunction {
@@ -31,7 +33,11 @@ export class Ship extends ex.Actor {
   private flipBarrel = false;
   private throttleFire?: FireFunction;
   private explode?: ex.Animation;
-  constructor(x: number, y: number, width: number, height: number) {
+  private isInsideRift: boolean;
+  private currentThread: SpaceThread | null;
+  private engine: Engine;
+
+  constructor(engine: Engine, x: number, y: number, width: number, height: number) {
     super({
       pos: new ex.Vector(x, y),
       width: width,
@@ -39,6 +45,9 @@ export class Ship extends ex.Actor {
     });
 
     this.body.collider.type = ex.CollisionType.Passive;
+    this.isInsideRift = false;
+    this.currentThread = null;
+    this.engine = engine;
   }
 
   onInitialize(engine: ex.Engine) {
@@ -65,13 +74,32 @@ export class Ship extends ex.Actor {
       }
       this.targetedEdge = evt.other;
       this.targetedEdge.color = Color.Blue;
+    } else if (evt.other instanceof Rift) {
+      this.isInsideRift = true;
     }
   }
 
   onCollisionEnd(evt: CollisionEndEvent) {
     if (evt.other === this.targetedEdge) {
+      if (this.isInsideRift) {
+        // by the time this event bubbles, the current thread
+        // attach point is a few pixels away from the actual
+        // targeted edge. Need to do some math to extend the current
+        // thread attach point vector to the middle of the
+        // targeted edge.
+        this.currentThread = new SpaceThread(this, this.getThreadAttachPoint());
+        this.engine.add(this.currentThread);
+      }
+
       this.targetedEdge.color = Color.Red;
       this.targetedEdge = undefined;
+    } else if (evt.other instanceof Rift) {
+      this.isInsideRift = false;
+
+      if (this.currentThread) {
+        this.currentThread.anchorThread();
+        this.currentThread = null;
+      }
     }
   }
 

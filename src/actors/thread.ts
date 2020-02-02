@@ -6,7 +6,7 @@ export class SpaceThread extends Actor {
   private ship: Ship;
   private endPoint: Vector | null;
 
-  constructor(ship: Ship) {
+  constructor(ship: Ship, startPoint: Vector) {
     super({
       pos: ship.center,
       width: 10,
@@ -14,7 +14,7 @@ export class SpaceThread extends Actor {
     });
 
     this.ship = ship;
-    this.startPoint = ship.center;
+    this.startPoint = startPoint;
     this.endPoint = null;
   }
 
@@ -25,7 +25,7 @@ export class SpaceThread extends Actor {
     ctx.lineJoin = "round";
     ctx.lineCap = "round";
 
-    ctx.moveTo(this.startPoint.x, this.startPoint.y + this.ship.height / 2);
+    ctx.moveTo(this.startPoint.x, this.startPoint.y);
     if (this.endPoint) {
       ctx.lineTo(this.endPoint.x, this.endPoint.y);
     } else {
@@ -37,6 +37,6 @@ export class SpaceThread extends Actor {
   }
 
   anchorThread() {
-    this.endPoint = this.ship.center;
+    this.endPoint = this.ship.getThreadAttachPoint();
   }
 }
